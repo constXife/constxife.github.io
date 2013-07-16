@@ -107,6 +107,8 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
+    rvm-capistrano (1.2.7)
+      capistrano (>= 2.0.0)
     sass (3.2.9)
     sass-rails (4.0.0)
       railties (>= 4.0.0.beta, < 5.0)
@@ -169,6 +171,7 @@ DEPENDENCIES
   pg
   rails (= 4.0.0)
   rails-i18n (~> 4.0.0.pre)
+  rvm-capistrano
   sass-rails (~> 4.0.0)
   sdoc
   slim-rails
