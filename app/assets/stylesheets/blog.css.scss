@@ -1,0 +1,41 @@
+// Place all the styles related to the blog controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.posts, div.post {
+  h3 {
+    font-size: x-large;
+    margin-bottom: -5px;
+    color: #000;
+
+    a {
+      text-decoration: none;
+      color: #000;
+    }
+  }
+
+  time {
+    margin-bottom: 0.5em;
+    display: block;
+    color: #999;
+    font-size: small;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style: none;
+    }
+  }
+
+  div.panel {
+    margin: 0.5em 0;
+
+    a, button {
+      margin-right: 1em;
+    }
+  }
+}

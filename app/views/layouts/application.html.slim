@@ -1,0 +1,76 @@
+doctype html
+html
+  head
+    title #{@title.to_s + '—' if @title.present?} Тыщ constXife Кьятлоттьяви
+    meta name="keywords" content="blog constXife"
+    meta name="author" content="Tish Kiatlottiavi"
+
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    link href='http://fonts.googleapis.com/css?family=Scada' rel='stylesheet' type='text/css'
+    link href='http://fonts.googleapis.com/css?family=Milonga' rel='stylesheet' type='text/css'
+    link href='http://fonts.googleapis.com/css?family=Underdog&subset=cyrillic' rel='stylesheet' type='text/css'
+    = csrf_meta_tags
+  body
+    a href="#" class="scrollup" &uarr;
+    div#wrap
+      div.container
+        header
+          h1
+            a[href="/"] constXife
+            - if user_signed_in?
+              = link_to 'X', destroy_user_session_path, {:class => 'logout'}
+            div Обжигающе-холодные мерцающие угольки
+
+          ul.nav
+          /  li class="#{request.path_info == '/' ? "active" :nil}"
+          /    = link_to 'Главная', root_path
+            /li class="#{request.path_info == '/posts.html' ? "active" :nil}"
+            /  = link_to 'Записи', posts_path
+            /li class="#{request.path_info == '/projects.html' ? "active" :nil}"
+            /  a href="/projects.html" title="Проекты" Проекты
+
+        div#content
+          == yield
+
+        div#push
+
+    footer
+      div.container
+        div.span4
+          a href="mailto:zombie.with.hair@gmail.com" title="Связаться через e-mail"
+            i.icon-envelope.icon-large
+          a href="http://vk.com/tish.kiatlottiavi" title="VK"
+            i.icon-vk.icon-large
+          a href="https://twitter.com/constXife" title="Twitter"
+            i.icon-twitter.icon-large
+        div.span4 2013
+        div.span4
+
+  - if Rails.env.production?
+    javascript:
+      <!-- Yandex.Metrika counter -->
+      <script type="text/javascript">
+      (function (d, w, c) {
+          (w[c] = w[c] || []).push(function() {
+              try {
+                  w.yaCounter21799057 = new Ya.Metrika({id:21799057,
+                          clickmap:true,
+                          trackLinks:true});
+              } catch(e) { }
+          });
+
+          var n = d.getElementsByTagName("script")[0],
+              s = d.createElement("script"),
+              f = function () { n.parentNode.insertBefore(s, n); };
+          s.type = "text/javascript";
+          s.async = true;
+          s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+          if (w.opera == "[object Opera]") {
+              d.addEventListener("DOMContentLoaded", f, false);
+          } else { f(); }
+      })(document, window, "yandex_metrika_callbacks");
+      </script>
+      <noscript><div><img src="//mc.yandex.ru/watch/21799057" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+      <!-- /Yandex.Metrika counter -->

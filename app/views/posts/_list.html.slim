@@ -1,0 +1,16 @@
+div.posts
+  - if user_signed_in?
+    = link_to 'Новая запись', new_post_path
+
+  ul
+    - @posts.each do |post|
+      li
+        h3 #{link_to post.title, post_url(post)}
+        time[datetime="#{post.created_at}"] Опубликовано #{I18n.l post.created_at, :format => :short}
+
+        div.preview
+          == post.preview
+
+          = link_to 'Читать далее', post_url(post)
+
+  = paginate @posts, :remote => true
