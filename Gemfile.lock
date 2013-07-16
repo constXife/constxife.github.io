@@ -29,7 +29,7 @@ GEM
     atomic (1.1.10)
     bcrypt-ruby (3.1.1)
     builder (3.1.4)
-    capistrano (2.14.2)
+    capistrano (2.15.5)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -53,7 +53,7 @@ GEM
     formtastic (2.2.1)
       actionpack (>= 3.0)
     friendly_id (4.0.9)
-    highline (1.6.16)
+    highline (1.6.19)
     hike (1.2.3)
     i18n (0.6.4)
     jbuilder (1.4.2)
@@ -74,11 +74,11 @@ GEM
     mime-types (1.23)
     minitest (4.7.5)
     multi_json (1.7.7)
-    net-scp (1.1.0)
+    net-scp (1.1.2)
       net-ssh (>= 2.6.5)
-    net-sftp (2.1.1)
+    net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (2.6.6)
+    net-ssh (2.6.8)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     orm_adapter (0.4.0)
@@ -160,7 +160,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  capistrano
+  capistrano (>= 2.15.4)
   coffee-rails (~> 4.0.0)
   devise (~> 3.0.0.rc)
   formtastic

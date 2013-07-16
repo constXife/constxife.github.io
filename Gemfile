@@ -47,6 +47,6 @@ gem 'unicorn'
 # gem 'debugger', group: [:development, :test]
 
 group :development do
-  gem 'capistrano'
+  gem 'capistrano', '>= 2.15.4'
   gem 'rvm-capistrano'
 end
