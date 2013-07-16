@@ -1,4 +1,6 @@
-- if @posts
+- if @posts.empty
+  p Здесь пока пусто.
+- else
   div.posts
     - if user_signed_in?
       = link_to 'Новая запись', new_post_path
@@ -15,5 +17,3 @@
             = link_to 'Читать далее', post_url(post)
 
     = paginate @posts, :remote => true
-- else
-  p Пока здесь пусто.
