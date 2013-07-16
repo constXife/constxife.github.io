@@ -1,8 +1,8 @@
+- if user_signed_in?
+  = link_to 'Новая запись', new_post_path
+
 - if @posts.first.present?
   div.posts
-    - if user_signed_in?
-      = link_to 'Новая запись', new_post_path
-
     ul
       - @posts.each do |post|
         li
