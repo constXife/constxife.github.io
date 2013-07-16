@@ -10,6 +10,7 @@ html
     link href='http://fonts.googleapis.com/css?family=Scada' rel='stylesheet' type='text/css'
     link href='http://fonts.googleapis.com/css?family=Milonga' rel='stylesheet' type='text/css'
     link href='http://fonts.googleapis.com/css?family=Underdog&subset=cyrillic' rel='stylesheet' type='text/css'
+    = auto_discovery_link_tag(:atom, posts_path(:atom))
     = csrf_meta_tags
   body
     a href="#" class="scrollup" &uarr;
