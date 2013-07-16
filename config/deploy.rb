@@ -1,5 +1,4 @@
 require 'bundler/capistrano'
-require 'rvm/capistrano'
 
 set :application, "blog"
 set :rails_env, "production"
