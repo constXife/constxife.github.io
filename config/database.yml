@@ -55,8 +55,9 @@ test:
 
 production:
   adapter: postgresql
+  host: localhost
   encoding: unicode
-  database: blog_production
+  database: blog
   pool: 5
   username: blog
-  password:
+  password: 3rg43uQog6XV
