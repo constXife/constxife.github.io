@@ -15,7 +15,6 @@ $(document).ready(
           "path":"/assets/redactor-rails",
           "css":"style.css",
           "focus": true,
-          "lang": 'ru',
           "plugins": ['fullscreen']
       }
 });
