@@ -20,6 +20,7 @@ role :db,  domain, :primary => true
 
 set :copy_exclude, [ '.git' ]
 set :keep_releases, 1
+set :shared_children, shared_children + %w{public/system}
 
 # Следующие строки необходимы, т.к. ваш проект использует rvm.
 set :rvm_ruby_string, 'ruby-2.0.0'

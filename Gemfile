@@ -25,6 +25,9 @@ gem 'slim-rails'
 gem 'rails-i18n', '~> 4.0.0.pre'
 gem 'friendly_id', branch: '4.0-stable'
 gem 'therubyracer', :platforms => :ruby
+gem 'redactor-rails', :git => 'git://github.com/constXife/redactor-rails.git', :branch => 'master'
+gem 'carrierwave'
+gem 'mini_magick'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'

@@ -17,10 +17,7 @@ hidePanel = ->
 $(document).ready ->
   $('.fancybox').fancybox()
 
-  $('.redactor').redactor
-    lang: 'ru'
-    focus: true
-    toolbarFixed: true
+  $('.redactor').redactor(window.blog.redactor_config)
 
   $('#edit_post').on 'click', ->
     content = $('div.post div.content')
@@ -34,14 +31,8 @@ $(document).ready ->
       saveButton.show()
       content.addClass('redactor')
       preview.addClass('redactor')
-      content.redactor
-        lang: 'ru'
-        focus: true
-        toolbarFixed: true
-      preview.redactor
-        lang: 'ru'
-        focus: true
-        toolbarFixed: true
+      content.redactor(window.blog.redactor_config)
+      preview.redactor(window.blog.redactor_config)
 
   $('#save_post').on 'click', ->
     content = $('.content.redactor').redactor('get');

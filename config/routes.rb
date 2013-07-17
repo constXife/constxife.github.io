@@ -1,4 +1,5 @@
 Blog::Application.routes.draw do
+  mount RedactorRails::Engine => '/redactor_rails'
   root 'application#index'
 
   scope '/blog' do
