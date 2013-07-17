@@ -20,3 +20,8 @@ $(document).ready ->
     $('.scrollup').click ->
       $("html, body").animate({ scrollTop: 0 }, 600)
       return false;
+
+    <% if Rails.env.production? %>
+    VK.init({apiId: 3771415, onlyWidgets: true})
+    VK.Widgets.Comments('vk_comments', {width: 940, limit: 20, autoPublish: 0, attach: '*'})
+    <% end %>

@@ -7,6 +7,7 @@ html
 
     = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
+    script type="text/javascript" src="//vk.com/js/api/openapi.js?97"
     link href='http://fonts.googleapis.com/css?family=Scada' rel='stylesheet' type='text/css'
     link href='http://fonts.googleapis.com/css?family=Milonga' rel='stylesheet' type='text/css'
     link href='http://fonts.googleapis.com/css?family=Underdog&subset=cyrillic' rel='stylesheet' type='text/css'
@@ -23,12 +24,6 @@ html
             div Обжигающе-холодные мерцающие угольки
 
           ul.nav
-          /  li class="#{request.path_info == '/' ? "active" :nil}"
-          /    = link_to 'Главная', root_path
-            /li class="#{request.path_info == '/posts.html' ? "active" :nil}"
-            /  = link_to 'Записи', posts_path
-            /li class="#{request.path_info == '/projects.html' ? "active" :nil}"
-            /  a href="/projects.html" title="Проекты" Проекты
 
         div#content
           == yield

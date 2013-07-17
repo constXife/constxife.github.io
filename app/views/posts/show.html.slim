@@ -11,10 +11,10 @@ div.post data-id="#{@post.id if user_signed_in?}"
     div.panel
       button class="btn" id="edit_post" Изменить
       button class="btn hidden" id="save_post" Сохранить
-      /= link_to 'Изменить', edit_post_path(@post)
-      /= link_to 'Удалить', @post, method: :delete, data: { confirm: 'Are you sure?' }
 
   div.preview
     == @post.preview
   div.content
     == @post.content
+
+  div#vk_comments
