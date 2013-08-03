@@ -52,4 +52,7 @@ gem 'unicorn'
 group :development do
   gem 'capistrano', '>= 2.15.4'
   gem 'rvm-capistrano'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'meta_request'
 end
