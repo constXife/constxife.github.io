@@ -11,6 +11,7 @@ html
     link href='http://fonts.googleapis.com/css?family=Scada' rel='stylesheet' type='text/css'
     link href='http://fonts.googleapis.com/css?family=Milonga' rel='stylesheet' type='text/css'
     link href='http://fonts.googleapis.com/css?family=Underdog&subset=cyrillic' rel='stylesheet' type='text/css'
+    = auto_discovery_link_tag :atom, posts_path(format: 'atom')
     = csrf_meta_tags
   body
     a href="#" class="scrollup" &uarr;
@@ -40,7 +41,9 @@ html
           a href="https://twitter.com/constXife" title="Twitter"
             i.icon-twitter.icon-large
         div.span4 2013
-        div.span4
+        div.span3.right
+          a href="#{url_for posts_path(format: 'atom')}" title="RSS"
+            i.icon-rss.icon-large
 
     - if Rails.env.production?
       javascript:
