@@ -1,5 +1,5 @@
 atom_feed :language => 'ru-RU' do |feed|
-  feed.title('Лента новостей')
+  feed.title('constXife')
   feed.updated(@posts.first.created_at)
   feed.author do |author|
     author.name('Тыщ constXife Кьятлоттьяви')
