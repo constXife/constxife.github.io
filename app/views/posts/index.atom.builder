@@ -8,7 +8,7 @@ atom_feed :language => 'ru-RU' do |feed|
   @posts.each do |post|
     feed.entry(post) do |entry|
       entry.title(post.title)
-      entry.content(post.preview, :type => 'html')
+      entry.content(post.preview + link_to('Читать далее', post_url(post)), :type => 'html')
     end
   end
 end
