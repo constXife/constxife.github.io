@@ -18,9 +18,9 @@ development:
   adapter: postgresql
   encoding: unicode
   database: blog_development
-  host: localhost
+  host: selena
   pool: 5
-  username: constXife
+  username: blog
   password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
