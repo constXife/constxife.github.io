@@ -5,7 +5,7 @@ p#notice
 
 div.post data-id="#{@post.id if user_signed_in?}"
   h3 #{@post}
-  time[datetime="#{@post.created_at}"] Опубликовано #{I18n.l @post.created_at, :format => :short}
+  = time_tag @post.created_at, "Опубликовано #{I18n.l(@post.created_at, :format => :long)}"
 
   - if user_signed_in?
     div.panel

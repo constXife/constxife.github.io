@@ -7,7 +7,7 @@
       - @posts.each do |post|
         li
           h3 #{link_to post.title, post_url(post)}
-          time[datetime="#{post.created_at}"] Опубликовано #{I18n.l post.created_at, :format => :short}
+          = time_tag post.created_at, "Опубликовано #{I18n.l(post.created_at, :format => :long)}"
 
           div.preview
             == post.preview

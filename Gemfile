@@ -18,6 +18,7 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer', platforms: :ruby
 
 gem 'formtastic'
+gem 'formtastic-bootstrap'
 gem 'devise', '~> 3.0.0.rc'
 gem 'kaminari'
 gem 'kaminari-bootstrap'

@@ -3,7 +3,10 @@
 #= require redactor/fullscreen
 #= require redactor-rails/config
 #= require jquery.fancybox.pack
+#= require highlight.pack
 #= require_tree .
+
+hljs.initHighlightingOnLoad();
 
 $.ajaxSetup
   beforeSend: (xhr) ->

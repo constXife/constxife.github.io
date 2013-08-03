@@ -1,7 +1,9 @@
 //= require bootstrap.min
+//= require formtastic-bootstrap
 //= require font-awesome.min
 //= require redactor-rails
-//= require jquery.fancybox.css
+//= require jquery.fancybox
+//= require highlight/github
 //= require_self
 //= require_tree .
 
@@ -43,12 +45,6 @@ header {
     text-align: center;
     font-family: 'Milonga', cursive;
 
-    div {
-      font-size: small;
-      color: #333;
-      font-family: 'Underdog', cursive;
-    }
-
     a {
       color: inherit;
     }
@@ -64,6 +60,15 @@ header {
       vertical-align: top;
       color: #002a80;
     }
+  }
+
+  h2 {
+    line-height: 1.5;
+    margin-bottom: 21px;
+    text-align: center;
+    font-size: small;
+    color: #333;
+    font-family: 'Underdog', cursive;
   }
 
   nav {
