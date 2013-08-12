@@ -3,6 +3,7 @@ class Post < ActiveRecord::Base
   paginates_per 10
   extend FriendlyId
   friendly_id :title, use: :slugged
+  acts_as_taggable
 
   def to_s
     self.title

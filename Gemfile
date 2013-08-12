@@ -29,6 +29,8 @@ gem 'therubyracer', :platforms => :ruby
 gem 'redactor-rails', :git => 'git://github.com/constXife/redactor-rails.git', :branch => 'master'
 gem 'carrierwave'
 gem 'mini_magick'
+gem 'acts-as-taggable-on'
+gem 'select2-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'

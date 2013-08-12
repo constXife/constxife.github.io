@@ -9,6 +9,14 @@
           h3 #{link_to post.title, post_url(post)}
           = time_tag post.created_at, "Опубликовано #{I18n.l(post.created_at, :format => :long)}"
 
+          - if post.tag_list.count > 0
+            div.tags
+              ul
+                - post.tag_list.each do |tag|
+                  li
+                    a[class="label label-default #{'current' if @tag && @tag == tag}" href="#{url_for tag_path(tag)}"]
+                      = tag
+
           div.preview
             == post.preview
 

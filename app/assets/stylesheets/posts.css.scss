@@ -2,6 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import "variables";
+
 h3.posts {
   a {
     color: #FF4500;
@@ -13,6 +15,34 @@ h3.posts {
 }
 
 div.posts, div.post {
+  div.tags {
+    margin-bottom: 1em;
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        display: inline-block;
+        margin-right: 0.3em;
+
+        a {
+          color: #fff;
+          background: lighten($default_link_color, 10%);
+          font-size: small;
+        }
+        a:hover {
+          background: $default_link_color;
+        }
+        a.current {
+          background: lighten($default_link_color, 30%);
+          color: #fff;
+        }
+      }
+    }
+  }
+
   h3 {
     font-size: x-large;
     margin-bottom: -5px;
@@ -25,6 +55,7 @@ div.posts, div.post {
   }
 
   time {
+    margin-top: 0.6em;
     margin-bottom: 0.5em;
     display: block;
     color: #999;
@@ -41,7 +72,7 @@ div.posts, div.post {
     }
   }
 
-  div.panel {
+  div.rule-panel {
     margin: 0.5em 0;
 
     a, button {

@@ -5,7 +5,17 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.page params[:page].to_i
+    @tag = params[:tag]
+    page = params[:page].to_i
+    if @tag
+      @posts = Kaminari.paginate_array(Post.tagged_with(@tag).to_a).page(page)
+    else
+      @posts = Post.page(page)
+    end
+  end
+
+  def tags
+    render json: {results: Post.tag_counts_on(:tags).map{|x| {id: x.name, text: x.name}.to_json}.join(', '), more: false}
   end
 
   # GET /posts/1
@@ -77,6 +87,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :content, :preview)
+      params.require(:post).permit(:title, :content, :preview, :tag_list)
     end
 end
