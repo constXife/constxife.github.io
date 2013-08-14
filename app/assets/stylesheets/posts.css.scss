@@ -72,6 +72,18 @@ div.posts, div.post {
     }
   }
 
+  div.preview, div.content {
+    ul {
+      list-style: inherit;
+      margin: inherit;
+      padding: inherit;
+
+      li {
+        list-style: inherit;
+      }
+    }
+  }
+
   div.rule-panel {
     margin: 0.5em 0;
 
