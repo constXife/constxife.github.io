@@ -21,7 +21,9 @@ div.post data-id="#{@post.id if user_signed_in?}"
 
   div.preview
     == @post.preview
+  div.clearfix
   div.content
     == @post.content
+  div.clearfix
 
   div#vk_comments

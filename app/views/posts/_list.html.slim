@@ -22,6 +22,8 @@
 
             = link_to 'Читать далее', post_url(post)
 
+          div.clearfix
+
     = paginate @posts, :remote => true
 - else
   p Здесь пока пусто.
