@@ -4,8 +4,8 @@ require 'rvm/capistrano'
 
 set :application, "blog"
 set :rails_env, "production"
-set :domain, "constXife@oblakan.ru"
-set :deploy_to, "/var/www/#{application}"
+set :domain, "constXife@lunkserv.ru"
+set :deploy_to, "/var/www/constxife.ru"
 set :use_sudo, false
 set :unicorn_conf, "#{deploy_to}/current/config/unicorn.rb"
 set :unicorn_pid, "#{deploy_to}/shared/pids/unicorn.pid"

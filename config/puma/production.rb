@@ -1,4 +1,4 @@
-deploy_to  = "/var/www/blog"
+deploy_to  = "/var/www/constxife"
 rails_root = "#{deploy_to}/current"
 pid_file   = "#{deploy_to}/shared/pids/puma.pid"
 state_file = "#{deploy_to}/shared/pids/puma.state"
