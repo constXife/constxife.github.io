@@ -1,6 +1,11 @@
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
-
-require File.expand_path('../config/application', __FILE__)
-
-Blog::Application.load_tasks
+require 'sinatra/activerecord/rake'
+require 'bundler'
+Bundler.require
+require 'sinatra/activerecord'
+require 'erb'
+require 'sinatra/asset_pipeline'
+require 'i18n'
+require 'i18n/backend/fallbacks'
+require File.expand_path('lib/helpers', File.dirname(__FILE__))
+require File.expand_path('app/blog', File.dirname(__FILE__))
+require File.expand_path('app/models/post', File.dirname(__FILE__))

@@ -1,0 +1,31 @@
+-#- if user_signed_in?
+  -#= link_to 'Новая запись', new_post_path
+
+- if posts.first.present?
+  %div{:class => 'posts'}
+    %ul
+      - posts.each do |post|
+        %li
+          %h3
+            %a{:href => url("/blog/posts/#{post.title}")} #{post.title}
+          = time_tag post.created_at, "Опубликовано #{I18n.l(post.created_at, :format => :long)}"
+
+          -#- if post.tag_list.count > 0
+            %div{:class => 'tags'}
+              %ul
+                - post.tag_list.each do |tag|
+                  %li
+                    -#%a{:class => ["label label-default #{'current' if @tag && @tag == tag}"],
+                    -#:href => "#{url_for tag_path(tag)}"}
+                    -#  = tag
+
+          %div.preview
+            != post.preview
+
+            %a{:href => url("/blog/posts/#{post.title}")} Читать далее
+
+          %div{:class => 'clearfix'}
+
+    -#= paginate @posts, :remote => true
+- else
+  %p Здесь пока пусто.
