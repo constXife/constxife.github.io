@@ -1,6 +1,14 @@
 # Require this file for unit tests
 ENV['LOTUS_ENV'] ||= 'test'
 
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec/'
+  add_group 'Web', 'apps/web'
+  add_group 'Lib', 'lib'
+  add_group 'Config', 'config'
+end
+
 require_relative '../config/environment'
 Lotus::Application.preload!
 
@@ -97,4 +105,3 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
-
