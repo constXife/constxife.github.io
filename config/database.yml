@@ -1,9 +1,0 @@
-development:
-  adapter: postgresql
-  encoding: unicode
-  database: blog_development
-  host: <%= ENV['BLOG_DB_HOST'] %>
-  pool: 5
-  username: <%= ENV['BLOG_DB_USER'] %>
-  password: <%= ENV['BLOG_DB_PASSWORD'] %>
-production:

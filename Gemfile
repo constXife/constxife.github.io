@@ -1,14 +1,19 @@
 source 'https://rubygems.org'
 
-gem 'sinatra', '~> 1.4'
-gem 'sinatra-contrib', '~> 1.4'
-gem 'sinatra-activerecord', '~> 2.0'
-gem 'pg', '~> 0.17.1'
-gem 'sprockets', '~> 2.12.1'
-gem 'haml', '~> 4.0.5'
-gem 'sinatra-asset-pipeline', '~> 0.3.3'
-gem 'i18n', '~> 0.6'
-gem 'foreman', '~> 0.6'
-gem 'mina', '~> 0.3.0'
-gem 'puma', '~> 2.8'
-gem 'kaminari'
+gem 'bundler'
+gem 'rake'
+
+gem 'lotusrb',       '0.4.1'
+gem 'lotus-model',   '~> 0.4'
+
+
+gem 'pg'
+
+group :test do
+  gem 'rspec'
+  gem 'capybara'
+end
+
+group :production do
+  # gem 'puma'
+end
