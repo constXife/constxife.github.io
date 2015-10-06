@@ -7,7 +7,7 @@
 
 ## Description
 
-Personal blog on lotusrb
+Personal blog on lotusrb.
 
 ## Getting Started
 
