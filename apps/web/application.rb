@@ -1,5 +1,4 @@
 require 'lotus/helpers'
-require 'awesome_print'
 require 'semantic_logger'
 require 'r18n-core'
 require 'tilt/erb'
