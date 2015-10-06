@@ -6,4 +6,4 @@ rvm:
   - "2.2.3"
 install:
   - bundle install --without production
-  - bin/lotus db migrate
+  - bin/lotus db prepare
