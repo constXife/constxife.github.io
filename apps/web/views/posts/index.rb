@@ -1,4 +1,4 @@
-module Web::Views::Home
+module Web::Views::Posts
   class Index
     include Web::View
   end

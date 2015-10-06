@@ -1,0 +1,30 @@
+%a{href: '/blog/posts'} К списку
+
+- if post.nil?
+  %h2 Такого поста нет.
+- else
+  -#data-id="#{@post.id if user_signed_in?}"
+  .post
+    %h3 #{post}
+    %time{datetime: post.created_at} Опубликовано #{R18n.get.l(post.created_at, :human)}
+
+    - if post.tag_list.count > 0
+      .tags
+        %ul
+          - post.tag_list.each do |post_tag|
+            %li
+              %a.label.label-default{href: "/blog/tag/#{post_tag}"}
+                = post_tag
+
+    -#- if user_signed_in?
+    -#  div.rule-panel
+    -#    a class="btn btn-primary" href="#{url_for edit_post_path(@post)}" Изменить
+
+    .preview
+      = post.preview
+    .clearfix
+    .content
+      = post.content
+    .clearfix
+
+    #vk_comments

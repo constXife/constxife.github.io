@@ -2,8 +2,10 @@
 ENV['LOTUS_ENV'] ||= 'test'
 
 require 'simplecov'
+
 SimpleCov.start do
   add_filter '/spec/'
+  add_filter 'application'
   add_group 'Web', 'apps/web'
   add_group 'Lib', 'lib'
   add_group 'Config', 'config'

@@ -1,4 +1,9 @@
 require 'lotus/helpers'
+require 'awesome_print'
+require 'semantic_logger'
+require 'r18n-core'
+require 'tilt/erb'
+require 'tilt/haml'
 
 module Web
   class Application < Lotus::Application
@@ -172,7 +177,7 @@ module Web
       #  * http://content-security-policy.com/
       #  * https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy
       #
-      security.content_security_policy "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self';"
+      security.content_security_policy ''
 
       ##
       # FRAMEWORKS
@@ -194,6 +199,11 @@ module Web
       view.prepare do
         include Lotus::Helpers
       end
+
+      logger Web::Application.get_logger_instance
+
+      R18n.default_places = 'i18n'
+      R18n.set('ru')
     end
 
     ##
@@ -225,6 +235,11 @@ module Web
       # scheme 'https'
       # host   'example.org'
       # port   443
+    end
+
+    def self.get_logger_instance
+      SemanticLogger.add_appender($stdout, &SemanticLogger::Appender::Base.colorized_formatter)
+      SemanticLogger[self]
     end
   end
 end
