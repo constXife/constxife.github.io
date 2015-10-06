@@ -19,7 +19,7 @@ Personal blog on lotusrb
 
         bundle install
 
-3. Modify config files in config folder. Then run db migrations:
+3. Run db migrations:
 
         bin/lotus db migrate
 
