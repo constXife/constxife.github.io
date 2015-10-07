@@ -12,12 +12,15 @@ gem 'sass'
 gem 'semantic_logger', '~> 2.15'
 gem 'r18n-core', '~> 2.0.4'
 
+gem 'puma'
+
+group :development do
+  gem 'capistrano', '~> 3.4.0'
+end
+
 group :test do
   gem 'rspec'
   gem 'capybara'
   gem 'simplecov', require: false
-end
-
-group :production do
-  gem 'puma'
+  gem "codeclimate-test-reporter", require: false
 end
