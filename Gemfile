@@ -10,7 +10,6 @@ gem 'pg'
 gem 'haml'
 gem 'sass'
 gem 'semantic_logger', '~> 2.15'
-gem 'awesome_print'
 gem 'r18n-core', '~> 2.0.4'
 
 group :test do
