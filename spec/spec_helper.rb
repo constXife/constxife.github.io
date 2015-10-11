@@ -2,6 +2,7 @@
 ENV['LOTUS_ENV'] ||= 'test'
 
 require 'simplecov'
+require 'codeclimate-test-reporter'
 
 SimpleCov.start do
   add_filter '/spec/'
@@ -10,6 +11,8 @@ SimpleCov.start do
   add_group 'Lib', 'lib'
   add_group 'Config', 'config'
 end
+
+CodeClimate::TestReporter.start
 
 require_relative '../config/environment'
 Lotus::Application.preload!

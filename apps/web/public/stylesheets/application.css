@@ -1,0 +1,169 @@
+html, body {
+  height: 100%; }
+
+h1, h2, h3, h4 {
+  font-family: 'Scada', sans-serif;
+  font-weight: bold; }
+
+.hidden {
+  display: none; }
+
+.center {
+  text-align: center; }
+
+.scrollup {
+  width: 4%;
+  height: 100%;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  left: 0;
+  padding-top: 10px;
+  color: #000;
+  display: none;
+  font-size: x-large;
+  background: #efefef; }
+
+a.scrollup:hover {
+  text-decoration: none; }
+
+header {
+  margin-top: -10px; }
+  header h1 {
+    text-align: center;
+    font-family: 'Milonga', cursive; }
+    header h1 a {
+      color: inherit; }
+    header h1 a:hover {
+      color: inherit;
+      text-decoration: inherit; }
+    header h1 a.logout {
+      font-size: medium;
+      font-family: inherit;
+      vertical-align: top;
+      color: #002a80; }
+  header h2 {
+    line-height: 0;
+    margin-bottom: 21px;
+    text-align: center;
+    font-size: small;
+    color: #333;
+    font-family: 'Underdog', cursive; }
+
+ul.nav {
+  text-align: center;
+  font-size: large;
+  margin: 0;
+  padding: 0 0 0.5em 0;
+  border-bottom: 1px solid #ccc; }
+  ul.nav li {
+    display: inline; }
+    ul.nav li a {
+      display: inline-block;
+      padding: 0.5em;
+      margin-right: 0.5em;
+      font-family: 'Scada', sans-serif; }
+    ul.nav li a:hover {
+      border-radius: 0.5em; }
+  ul.nav li.active a {
+    background: #efefef;
+    border-radius: 0.5em; }
+
+#content {
+  color: #666; }
+
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -60px; }
+
+#push {
+  height: 60px;
+  clear: both; }
+
+footer div.container {
+  height: 20px;
+  border-top: 1px solid #efefef;
+  margin: 1em auto 0 auto;
+  padding: 1em 0 0 0;
+  text-align: center;
+  font-size: 90%;
+  color: #666; }
+  footer div.container a {
+    color: #000;
+    margin-right: 1em; }
+  footer div.container a:hover {
+    text-decoration: none; }
+  footer div.container .span4 {
+    text-align: center; }
+  footer div.container .right {
+    text-align: right; }
+
+#redactor {
+  margin-bottom: 10px; }
+
+.chosen-select {
+  width: 600px; }
+
+h2.label.label-primary {
+  font-size: 150%;
+  display: inline-block; }
+  h2.label.label-primary a {
+    color: #000; }
+
+h3.posts a {
+  color: #FF4500; }
+h3.posts a:hover {
+  text-decoration: none; }
+
+div.posts div.tags, div.post div.tags {
+  margin-bottom: 1em; }
+  div.posts div.tags ul, div.post div.tags ul {
+    margin: 0;
+    padding: 0; }
+    div.posts div.tags ul li, div.post div.tags ul li {
+      list-style: none;
+      display: inline-block;
+      margin-right: 0.3em; }
+      div.posts div.tags ul li a, div.post div.tags ul li a {
+        color: #fff;
+        background: #357fbe;
+        font-size: small; }
+      div.posts div.tags ul li a:hover, div.post div.tags ul li a:hover {
+        background: #2a6496; }
+      div.posts div.tags ul li a.current, div.post div.tags ul li a.current {
+        background: #7eb0db;
+        color: #fff; }
+div.posts h3, div.post h3 {
+  font-size: x-large;
+  margin-bottom: -5px;
+  color: #000; }
+  div.posts h3 a, div.post h3 a {
+    text-decoration: none;
+    color: #000; }
+div.posts time, div.post time {
+  margin-top: 0.6em;
+  margin-bottom: 0.5em;
+  display: block;
+  color: #999;
+  font-size: small; }
+div.posts ul, div.post ul {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+  div.posts ul li, div.post ul li {
+    list-style: none; }
+div.posts div.preview ul, div.posts div.content ul, div.post div.preview ul, div.post div.content ul {
+  list-style: inherit;
+  margin: inherit;
+  padding: inherit; }
+  div.posts div.preview ul li, div.posts div.content ul li, div.post div.preview ul li, div.post div.content ul li {
+    list-style: inherit; }
+div.posts div.rule-panel, div.post div.rule-panel {
+  margin: 0.5em 0; }
+  div.posts div.rule-panel a, div.posts div.rule-panel button, div.post div.rule-panel a, div.post div.rule-panel button {
+    margin-right: 1em; }
+
+#vk_comments {
+  margin-top: 15px !important; }
