@@ -27,6 +27,26 @@ set :puma_bind, "unix://#{shared_path}/tmp/sockets/blog.sock"
 set :keep_releases, 1
 
 namespace :deploy do
+  desc 'Copy assets'
+  after 'deploy:updating', :copy_assets do
+    run_locally do
+      with rails_env: :production do
+        execute :bundle, 'exec hanami assets precompile'
+      end
+    end
+
+    on roles(:app) do |server|
+      warn "#{server}"
+      %x{rsync -av ./public/assets/ #{server.user}@#{server.hostname}:#{release_path}/public/assets/}
+      %x{rsync -av ./public/assets.json #{server.user}@#{server.hostname}:#{release_path}/public/assets.json}
+      execute :chmod, "-R +r #{release_path}/public/assets"
+    end
+
+    run_locally do
+      execute :bundle, %x{rm -rf ./public}
+    end
+  end
+
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
