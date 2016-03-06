@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.4.0)
-    airbrussh (0.8.0)
+    airbrussh (1.0.0)
       sshkit (>= 1.6.1, != 1.7.0)
     capistrano (3.4.0)
       i18n
@@ -23,7 +23,7 @@ GEM
       xpath (~> 2.0)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
-    concurrent-ruby (1.0.0)
+    concurrent-ruby (1.0.1)
     diff-lcs (1.2.5)
     docile (1.1.5)
     dotenv (2.1.0)
@@ -82,7 +82,7 @@ GEM
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
-    puma (2.16.0)
+    puma (3.1.0)
     r18n-core (2.0.4)
     rack (1.6.4)
     rack-test (0.6.3)
