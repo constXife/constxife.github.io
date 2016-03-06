@@ -1,11 +1,11 @@
-require 'lotus/helpers'
+require 'hanami/helpers'
 require 'semantic_logger'
 require 'r18n-core'
 require 'tilt/erb'
 require 'tilt/haml'
 
 module Web
-  class Application < Lotus::Application
+  class Application < Hanami::Application
     configure do
       ##
       # BASIC
@@ -26,7 +26,7 @@ module Web
 
       # Handle exceptions with HTTP statuses (true) or don't catch them (false).
       # Defaults to true.
-      # See: http://www.rubydoc.info/gems/lotus-controller/#Exceptions_management
+      # See: http://www.rubydoc.info/gems/hanami-controller/#Exceptions_management
       #
       # handle_exceptions true
 
@@ -35,7 +35,7 @@ module Web
       #
 
       # Routes definitions for this application
-      # See: http://www.rubydoc.info/gems/lotus-router#Usage
+      # See: http://www.rubydoc.info/gems/hanami-router#Usage
       #
       routes 'config/routes'
 
@@ -126,7 +126,40 @@ module Web
       # Enabling serving assets
       # Defaults to false
       #
-      # serve_assets false
+      assets do
+        # JavaScript compressor
+        #
+        # Supported engines:
+        #
+        #   * :builtin
+        #   * :uglifier
+        #   * :yui
+        #   * :closure
+        #
+        # See: http://hanamirb.org/guides/assets/compressors
+        #
+        # In order to skip JavaScript compression comment the following line
+        javascript_compressor :builtin
+
+        # Stylesheet compressor
+        #
+        # Supported engines:
+        #
+        #   * :builtin
+        #   * :yui
+        #   * :sass
+        #
+        # See: http://hanamirb.org/guides/assets/compressors
+        #
+        # In order to skip stylesheet compression comment the following line
+        stylesheet_compressor :builtin
+
+        # Specify sources for assets
+        #
+        sources << [
+            'assets'
+        ]
+      end
 
       ##
       # SECURITY
@@ -185,7 +218,7 @@ module Web
       # Configure the code that will yield each time Web::Action is included
       # This is useful for sharing common functionality
       #
-      # See: http://www.rubydoc.info/gems/lotus-controller#Configuration
+      # See: http://www.rubydoc.info/gems/hanami-controller#Configuration
       controller.prepare do
         # include MyAuthentication # included in all the actions
         # before :authenticate!    # run an authentication before callback
@@ -194,9 +227,10 @@ module Web
       # Configure the code that will yield each time Web::View is included
       # This is useful for sharing common functionality
       #
-      # See: http://www.rubydoc.info/gems/lotus-view#Configuration
+      # See: http://www.rubydoc.info/gems/hanami-view#Configuration
       view.prepare do
-        include Lotus::Helpers
+        include Hanami::Helpers
+        include Web::Assets::Helpers
       end
 
       logger Web::Application.get_logger_instance
@@ -211,9 +245,6 @@ module Web
     configure :development do
       # Don't handle exceptions, render the stack trace
       handle_exceptions false
-
-      # Serve static assets during development
-      serve_assets      true
     end
 
     ##
@@ -222,9 +253,6 @@ module Web
     configure :test do
       # Don't handle exceptions, render the stack trace
       handle_exceptions false
-
-      # Serve static assets during development
-      serve_assets      true
     end
 
     ##
@@ -234,6 +262,11 @@ module Web
       # scheme 'https'
       # host   'example.org'
       # port   443
+
+      assets do
+        compile false
+        digest true
+      end
     end
 
     def self.get_logger_instance

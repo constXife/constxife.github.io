@@ -7,7 +7,7 @@
 
 ## Description
 
-Personal blog on lotusrb.
+Personal blog on hanamirb.
 
 ## Getting Started
 
@@ -21,11 +21,11 @@ Personal blog on lotusrb.
 
 3. Run db migrations:
 
-        bin/lotus db migrate
+        bin/hanami db migrate
 
 4. Run server:
 
-        bin/lotus s -p 3000
+        bin/hanami s -p 3000
 
 5. Using a browser, go to `http://localhost:3000`
 
