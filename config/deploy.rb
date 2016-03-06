@@ -37,8 +37,8 @@ namespace :deploy do
 
     on roles(:app) do |server|
       warn "#{server}"
-      execute :chmod, "rm -rf #{release_path}/public/assets"
-      execute :chmod, "rm -f #{release_path}/public/assets.json"
+      execute :rm, "-rf #{release_path}/public/assets"
+      execute :rm, "-f #{release_path}/public/assets.json"
       %x{rsync -av ./public/assets/ #{server.user}@#{server.hostname}:#{release_path}/public/assets/}
       %x{rsync -av ./public/assets.json #{server.user}@#{server.hostname}:#{release_path}/public/assets.json}
       execute :chmod, "-R +r #{release_path}/public/assets"
