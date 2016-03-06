@@ -1,5 +1,5 @@
 class Post
-  include Lotus::Entity
+  include Hanami::Entity
   attributes :title, :preview, :content, :slug, :created_at, :updated_at
 
   def to_s

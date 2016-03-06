@@ -1,5 +1,5 @@
 class PostRepository
-  include Lotus::Repository
+  include Hanami::Repository
 
   class << self
     def tag_list(id)

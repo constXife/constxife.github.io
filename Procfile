@@ -1,1 +1,1 @@
-web: lotus server -p 3000
+web: hanami server -p 3000

@@ -2,7 +2,7 @@ require 'spec_helper'
 require_relative '../../../../apps/web/views/posts/show'
 
 describe Web::Views::Posts::Show do
-  let(:template)  { Lotus::View::Template.new('apps/web/templates/posts/show.html.haml') }
+  let(:template)  { Hanami::View::Template.new('apps/web/templates/posts/show.html.haml') }
   let(:view)      { Web::Views::Posts::Index.new(template, exposures) }
   let(:rendered)  { view.render }
 
