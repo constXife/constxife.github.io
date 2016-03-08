@@ -1,30 +1,19 @@
+# If you do not have OpenSSL installed, change
+# the following line to use 'http://'
 source 'https://rubygems.org'
 
-gem 'bundler'
-gem 'rake'
+# For faster file watcher updates on Windows:
+gem 'wdm', '~> 0.1.0', platforms: [:mswin, :mingw]
 
-gem 'hanami',       '0.7.2'
-gem 'hanami-model', '~> 0.5'
+# Windows does not come with time zone data
+gem 'tzinfo-data', platforms: [:mswin, :mingw, :jruby]
 
-gem 'pg'
-gem 'haml'
-gem 'semantic_logger', '~> 2.15'
-gem 'r18n-core', '~> 2.0.4'
+# Middleman Gems
+gem 'middleman', '~> 4.0.0'
+gem 'middleman-blog'
+gem 'middleman-livereload', '~> 3.4.3'
 
-group :development do
-  gem 'capistrano', '~> 3.0'
-  gem 'capistrano-bundler'
-  gem 'capistrano3-puma'
-  gem 'airbrussh'
-end
+gem 'redcarpet', '~> 3.3', '>= 3.3.3'
 
-group :test do
-  gem 'rspec'
-  gem 'capybara'
-  gem 'simplecov', require: false
-  gem 'codeclimate-test-reporter', require: false
-end
-
-group :production do
-  gem 'puma'
-end
+# For feed.xml.builder
+gem 'builder', '~> 3.0'

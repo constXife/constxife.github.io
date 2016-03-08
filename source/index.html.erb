@@ -1,0 +1,47 @@
+---
+pageable: true
+per_page: 10
+---
+<% if paginate && num_pages > 1 %>
+  <p>Page <%= page_number %> of <%= num_pages %></p>
+
+  <% if prev_page %>
+    <p><%= link_to 'Previous page', prev_page %></p>
+  <% end %>
+<% end %>
+
+<div class="articles-list">
+  <% page_articles.each_with_index do |article, i| %>
+      <div class="article">
+        <div class="image">
+          <% if article.data.image %>
+          <a href="<%= url_for article %>">
+            <img src="<%= article.data.image.link %>" alt="<%= article.data.image.caption %>">
+          </a>
+          <% end %>
+        </div>
+
+        <div class="content">
+          <div class="category">
+            <i class="fa fa-<%= article.data.category.icon %>"></i>
+            <%= article.data.category.name %>
+          </div>
+          <h5><a href="<%= url_for article %>" title="<%= article.title %>"><%= article.title %></a></h5>
+          <hr>
+          <div class="meta"><%= I18n.l(article.date, format: '%e %B, %Y') %></div>
+          <% body = article.body.split("\n\n", 2) %>
+          <% if body.any? %><p><%= body[0] %></p><% end %>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+    <!-- use article.summary(250) if you have Nokogiri available to show just
+         the first 250 characters -->
+  <% end %>
+</div>
+
+<% if paginate %>
+  <% if next_page %>
+    <p><%= link_to 'Next page', next_page %></p>
+  <% end %>
+<% end %>

@@ -1,0 +1,27 @@
+<% wrap_layout :layout do %>
+  <article>
+    <div class="head">
+      <div class="category">
+        <i class="fa fa-<%= current_page.data.category.icon %>"></i>
+        <%= current_page.data.category.name %>
+      </div>
+      <h2><%= current_page.title %></h2>
+      <hr>
+      <div class="meta">Опубликовано <%= I18n.l(current_article.date, format: '%e %B, %Y') %></div>
+    </div>
+    <div class="body">
+      <%= yield %>
+    </div>
+    <div class="footer">
+      <div class="tags">
+        <ul>
+          <% current_page.tags.each do |tag| %>
+            <li>
+              <a class="label label-default" href="<%= tag_path(tag) %>"><%= tag %></a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </article>
+<% end %>
