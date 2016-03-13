@@ -22,19 +22,21 @@ per_page: 10
         </div>
 
         <div class="content">
+          <% if article.data.category %>
           <div class="category">
             <i class="fa fa-<%= article.data.category.icon %>"></i>
             <%= article.data.category.name %>
           </div>
+          <% end %>
           <h5><a href="<%= url_for article %>" title="<%= article.title %>"><%= article.title %></a></h5>
           <hr>
           <div class="meta"><%= I18n.l(article.date, format: '%e %B, %Y') %></div>
-          <% body = article.body.split("\n\n", 2) %>
-          <% if body.any? %><p><%= body[0] %></p><% end %>
+          <% body = Nokogiri::HTML.parse(article.body).css('p').first.text %>
+          <% if body %><p><%= body %></p><% end %>
         </div>
+        <div class="clearfix"></div>
       </div>
 
-      <div class="clearfix"></div>
     <!-- use article.summary(250) if you have Nokogiri available to show just
          the first 250 characters -->
   <% end %>

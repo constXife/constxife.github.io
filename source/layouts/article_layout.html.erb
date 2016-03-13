@@ -4,10 +4,12 @@
 <% wrap_layout :layout do %>
   <article>
     <div class="head">
+      <% if current_article.data.category %>
       <div class="category">
         <i class="fa fa-<%= current_article.data.category.icon %>"></i>
         <%= current_article.data.category.name %>
       </div>
+      <% end %>
       <h2><%= current_article.title %></h2>
       <hr>
       <div class="meta">Опубликовано <%= I18n.l(current_article.date, format: '%e %B, %Y') %></div>
