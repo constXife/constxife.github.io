@@ -66,9 +66,16 @@ end
 
 # Build-specific configuration
 configure :build do
-  # Minify CSS on build
-  # activate :minify_css
+  activate :minify_css
+  activate :minify_javascript
+  activate :gzip
+  activate :minify_html
+end
 
-  # Minify Javascript on build
-  # activate :minify_javascript
+configure :deploy do |deploy|
+  deploy.build_before    = true
+  deploy.deploy_method   = :sftp
+  deploy.host            = 'constxife.ru'
+  deploy.port            = 22
+  deploy.path            = '/srv/www/site'
 end
