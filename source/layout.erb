@@ -10,7 +10,7 @@
   <%= yield_content :head %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css" integrity="sha384-XXXXXXXX" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <%= stylesheet_link_tag 'layout' %>
 
@@ -26,16 +26,10 @@
 <![endif]-->
 
 <header>
-  <ul id="scene">
-    <li class="layer" data-depth="0.00"><img src="/images/bg.jpeg"></li>
-    <li class="layer" data-depth="0.20"><img src="/images/bg.jpeg"></li>
-    <li class="layer" data-depth="0.40">
-      <div id="scene_text">
-        <a href="/">constXife</a>
-        <div>Обжигающе-холодные, мерцающие угольки</div>
-      </div>
-    </li>
-  </ul>
+  <div id="scene_text">
+    <a href="/">constXife</a>
+    <div>Обжигающе-холодные, мерцающие угольки</div>
+  </div>
 </header>
 
 <div class="container">
@@ -51,7 +45,6 @@
     &copy; 2013
   </footer>
 </div>
-<%= javascript_include_tag 'parallax' %>
 <%= javascript_include_tag 'site' %>
 </body>
 </html>

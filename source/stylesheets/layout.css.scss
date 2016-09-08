@@ -11,20 +11,17 @@ body {
 header {
   color: #fff;
   width: 100%;
-
-  #scene {
-    height: 300px;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-  }
+  background: image-url('/images/bg.jpeg') center center;
+  background-size: cover;
+  height: 300px;
+  position: relative;
 
   #scene_text {
-    width: 500px;
-    margin-left: 85%;
-    margin-top: 10%;
-    padding: 1em;
     text-align: center;
+    position: absolute;
+    left: 40%;
+    top: 28%;
+    z-index: 5;
 
     a {
       text-decoration: none;
