@@ -71,11 +71,3 @@ configure :build do
   activate :gzip
   activate :minify_html
 end
-
-configure :deploy do |deploy|
-  deploy.build_before    = true
-  deploy.deploy_method   = :sftp
-  deploy.host            = 'constxife.ru'
-  deploy.port            = 22
-  deploy.path            = '/srv/www/site'
-end
