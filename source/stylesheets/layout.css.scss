@@ -18,27 +18,43 @@ header {
   background: image-url('/images/bg.jpeg') center center;
   background-size: cover;
   max-height: 300px;
+  margin-bottom: 2em;
+
+  a {
+    color: #fff;
+  }
 
   #scene_text {
     text-align: center;
     padding: 2em;
 
+    .lead {
+      a {
+        font-size: 400%;
+      }
+    }
+
     a {
       text-decoration: none;
-      font-size: 400%;
       font-family: 'Economica', sans-serif;
 
       &:hover {
         color: #fff;
       }
     }
-  }
 
-  a {
-    color: #fff;
-  }
+    .contacts {
+      margin-top: 1em;
 
-  margin-bottom: 3.5em;
+      li {
+        margin-right: 1.5em;
+        font-size: 150%;
+      }
+      li:last-child {
+        margin-right: inherit;
+      }
+    }
+  }
 }
 
 
