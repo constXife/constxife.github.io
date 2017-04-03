@@ -1,9 +1,0 @@
-language: ruby
-sudo: false
-addons:
-  postgresql: "9.4"
-rvm:
-  - "2.2.3"
-install:
-  - bundle install --without production
-  - bin/hanami db prepare
