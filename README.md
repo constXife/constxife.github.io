@@ -1,6 +1,6 @@
 # constxife.ru
 
-Personal blog.
+Personal blog on middleman
 
 ## Deploy
 
