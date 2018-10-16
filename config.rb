@@ -8,7 +8,6 @@
 page '/*.xml', layout: false
 page '/*.json', layout: false
 page '/*.txt', layout: false
-page 'blog/*', layout: :article_layout
 
 # With alternative layout
 # page "/path/to/file.html", layout: :otherlayout
@@ -41,7 +40,7 @@ activate :blog do |blog|
   # blog.month_link = "{year}/{month}.html"
   # blog.day_link = "{year}/{month}/{day}.html"
   # blog.default_extension = ".markdown"
-
+  blog.layout = 'article_layout'
   blog.tag_template = 'tag.html'
   blog.calendar_template = 'calendar.html'
 
