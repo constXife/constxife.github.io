@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Блог Карима constXife Кьятлоттьяви</title>
+  <subtitle>Обжигающе-холодные, мерцающие угольки</subtitle>
+  <id>http://constxife.ru/blog</id>
+  <link href="http://constxife.ru/blog"/>
+  <link href="http://constxife.ru/feed.xml" rel="self"/>
+  <updated>2018-10-16T03:34:00+03:00</updated>
+  <author>
+    <name>constXife</name>
+  </author>
+  <entry>
+    <title>Crystal 0.26 на Raspberry PI (raspbian)</title>
+    <link rel="alternate" href="http://constxife.ru/blog/2018/10/16/rpi-crystal.html"/>
+    <id>http://constxife.ru/blog/2018/10/16/rpi-crystal.html</id>
+    <published>2018-10-16T03:34:00+03:00</published>
+    <updated>2021-05-21T13:08:02+03:00</updated>
+    <author>
+      <name>constXife</name>
+    </author>
+    <content type="html">&lt;hr /&gt;
+
+&lt;p&gt;Установка &lt;a href="http://crystal-lang.org"&gt;Crystal 0.26&lt;/a&gt; на Raspberry PI (raspbian).&lt;/p&gt;
+
+&lt;p&gt;Решил я на выходных поиграться с Arduino и построением веб-интерфейса к моим механизмам на платформе Rasberry PI. 
+Можно было бы наклепать сайтик на Ruby и не писать эту статью, но &lt;a href="#reason"&gt;по определенным причинам&lt;/a&gt;,
+я решил делать веб-сайт на Crystal — компилируемым ruby-like языке. Засучил рукава, открыл гугл и наткнулся на отличный 
+ответ на &lt;a href="https://stackoverflow.com/questions/42796143/how-do-i-install-crystal-lang-on-rapsberry-pi"&gt;stackoverflow&lt;/a&gt;, 
+который мне здорово помог в моих изысканиях. Можно было бы удовлетвориться semi-официальному зеркалу Crystal и успокоиться,
+благо он встал в RPi словно всегда там и стоял. Но так как в репозитории была старая версия, то &lt;a href="#reason"&gt;по определенным причинам&lt;/a&gt;, я решил пользоваться 
+современнейшими технологиями и быть на острие прогресса, поэтому передо мной встала задача внедрить новейший Crystal 
+в этот миниатюрно-мигающий, процессинговый оплот моих будущих экспериментов. Итоги моих мытарств я сейчас и изложу 
+в кратком виде.&lt;/p&gt;
+
+&lt;p&gt;В нашем распоряжении&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Компьютер с Debian GNU/Linux 9 (stretch), llvm-3.8&lt;/li&gt;
+  &lt;li&gt;Raspberry Pi Zero, Raspbian GNU/Linux 9 (stretch), llvm-3.8&lt;/li&gt;
+  &lt;li&gt;Решимость во что бы то ни стало пройти сквозь тернии к установленному Crystal-у&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Общая схема действий такова: мы на нашем Debian скомпилируем object файл, перенесём его на raspbian, 
+скомпилируем его там и наслаждаемся результатом. Самая главная мысль, которая проходит сквозь весь туториал — надо 
+держать версии софта на обоих системах одинаковыми. Я кучу времени убил, пытаясь установить более новое ПО то тут, то там, 
+но в итоге оставил софт, который уже был в пакетах.&lt;/p&gt;
+
+&lt;p&gt;Сначала &lt;a href="https://crystal-lang.org/docs/installation/on_debian_and_ubuntu.html"&gt;установим&lt;/a&gt; на наш Debian 
+Crystal нужной версии. Далее нужно провести предварительные ласки для Debian и для raspbian в виде установки 
+обязательного программного обеспечения, общий список которых находится — &lt;a href="https://github.com/crystal-lang/crystal/wiki/All-required-libraries"&gt;тут&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Принимаем во внимание, что нам не нужно ставить BOEHM GC из исходников, у нас этим занимается пакет &lt;em&gt;libgc-dev&lt;/em&gt;, 
+который нужно поставить, если его нет.&lt;/p&gt;
+
+&lt;h5 id="debian"&gt;Debian&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Клонируем исходники crystal&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@debian ~/src $ git clone https://github.com/crystal-lang/crystal
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@debian ~/src $ cd crystal
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Переключаемся из мастера в стабильную ветку&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@debian ~/src/crystal $ git checkout 0.26.1
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Собираем объектный файл компилятора&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@debian ~/src/crystal $ make deps
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@debian ~/src/crystal $ ./bin/crystal build src/compiler/crystal.cr --cross-compile --target "armv6-unknown-linux-gnueabihf" --release -s -D without_openssl -D without_zlib
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Если всё сделано правильно, то у нас в директории появится файл &lt;em&gt;crystal.o&lt;/em&gt;. Половина дела сделана. Переходим к raspbian.&lt;/p&gt;
+
+&lt;h5 id="raspbian"&gt;Raspbian&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Повторяем действия как на debian&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src $ git clone https://github.com/crystal-lang/crystal
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src $ cd crystal
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ git checkout 0.26.1
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ make deps
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Бережно переносим файл &lt;em&gt;crystal.o&lt;/em&gt; на raspbian с debian.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ scp user@debian:~/src/crystal/crystal.o .
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Я решил взять расположение файлов как в Debian, чтобы было удобнее пользоваться компилятором (это обусловлено 
+динамической линковкой компилятора — ему потребуется доступ к библиотекам и исходникам)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ mkdir -p /usr/share/crystal /usr/lib/crystal/bin
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ cp -R src /usr/share/crystal/src
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Компилируем! (обратите внимание, что строка линковки отличается от предлагаемой после создания crystal.o, потому что
+у нас несколько другое расположение папок и файлов)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ cc 'crystal.o' -o '/usr/lib/crystal/bin/crystal' -rdynamic /usr/share/crystal/src/llvm/ext/llvm_ext.o `/usr/bin/llvm-config-3.8 --libs --system-libs --ldflags 2&amp;gt; /dev/null` -lstdc++ -lpcre -lm -lgc -lpthread /usr/share/crystal/src/ext/libcrystal.a -levent -lrt -ldl -L/usr/lib -L/usr/local/lib
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;В идеале здесь у вас должен скомпилироваться компилятор, если нет, проверьте шаги ранее, а может я просто ошибся в 
+последовательности действий или забыл что-то очень важное. Но, предположим, что всё идёт по плану. Дальше нужно дать доступ
+другим пользователям до бинарника и добавить shards (bundler в кристальном мире).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Забираем shell-обвязку к компилятору c Debian (из-за динамической линковки компилятора)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ scp user@debian:/usr/bin/crystal /usr/bin/crystal
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/crystal $ cd ..
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src $ git clone https://github.com/crystal-lang/shards.git
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src $ cd shards
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/shards $ git checkout v0.8.1
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/shards $ crystal build src/shards.cr -o /usr/lib/crystal/bin/shards --release
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/shards $ ln -s /usr/lib/crystal/bin/shards /usr/bin
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Вуаля.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/shards $ crystal -v
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+user@raspbian ~/src/shards $ shards --version
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id="section"&gt;Сноски&lt;/h5&gt;
+
+&lt;p id="reason"&gt;* так как я люблю создавать себе проблемы на пустом месте&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Зло на даче</title>
+    <link rel="alternate" href="http://constxife.ru/blog/2016/07/17/cottage-evil.html"/>
+    <id>http://constxife.ru/blog/2016/07/17/cottage-evil.html</id>
+    <published>2016-07-17T03:17:00+03:00</published>
+    <updated>2021-05-21T13:08:02+03:00</updated>
+    <author>
+      <name>constXife</name>
+    </author>
+    <content type="html">&lt;hr /&gt;
+
+&lt;p&gt;Ночую сейчас на дачном участке. Лежу в темноте (свет в комнате перегорел), пытаюсь уснуть. 
+Слышу как кто-то настойчиво шебуршится рядом в картонной коробке с вещами. 
+Попытка игнорирования постороннего шума разбилась об неумолкающий царап-царап в коробке. 
+Ну, думаю, шугану мышку. Посветил в угол смартфоном, отодвинул коробку и обомлел. 
+На меня в тусклом свете смартфона с ненавистью уставился комочек то ли жучары, то ли паука.&lt;/p&gt;
+
+&lt;p&gt;Я немедля приступил к зачистке территории. Стукнул по комочку жучары-паучары веничком и почти было успокоился, но с ужасом 
+вдруг обнаружил, что мой удар его вовсе не прикончил, и он лениво, словно нехотя, пытается ретироваться.&lt;/p&gt;
+
+&lt;p&gt;Следующую серию ударов веником я провёл мастерски, со сноровкой профессионального дезинсектора. 
+Но его это совершенно не впечатлило. Вскоре, от безуспешности моих ударов, в преддверьи неконтролируемой паники, 
+во мне проснулся берсерк. Я его истерично бил и шипел сквозь зубы: сдохни! Сдохни, ззззараза! Когда ж ты помрёшь, тварь?! 
+Наконец, жучара-паучара, устав от этого дерьма, ловко запрыгнул на мой веник и резво помчался по моей руке к шее, 
+дабы несомненно её перегрызть, высосать из меня все соки и устроить в моём теле личиночную Анталию. Мой испуганный вопль 
+под воздействием состояния берсерка трансформировался в неразборчивое агрессивное рычание. Я его смахнул на пол и, не мудрствуя 
+лукаво, начал прыгать на его тщедушном тельце ногами, забивая дерзнувшего сделать вызов человеку (венцу природного творения), 
+в бренную поверхность пола. Гнет его паучьих амбиций вкупе с тяжестью моих тапков неумолимо придавили его к земле, лишив дальнейших шансов на реванш.&lt;/p&gt;
+
+&lt;p&gt;С опаской я взирал на его неподвижное тело, ожидая от него всяческой подлянки или использования спецприёмов из их 
+паучье-жучарного военного арсенала. Надо было проверить мёртв ли он. Я чувствовал себя Эшем из зловещих мертвецов, 
+который пытался потрогать якобы убитую ведьму. Но на моё счастье, мой экземплярчик зловещих сил был мёртв. 
+По-настоящему мёртв. Его тело, безо всяких почестей, было сопровождено совком наружу и выкинуто на съедение птицам.&lt;/p&gt;
+
+&lt;p&gt;Я лёг снова спать. Но знаете что? Я вновь начал слышать шебуршание в коробке и царапанье об стены. На каждый шорох я 
+вскакиваю и просвечиваю комнату смартфоном, но никого не вижу. Пока ещё. Я должен продержаться, до рассвета ещё 5 часов. 
+Но я слышу как они пытаются пробраться ко мне, с каждым мгновением становясь всё более нетерпеливыми. Они жаждут мести.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Общественная карта проблем. Обновления от 4 февраля.</title>
+    <link rel="alternate" href="http://constxife.ru/blog/2014/02/04/obshestvennaya_karta_problem_obnovlenia.html"/>
+    <id>http://constxife.ru/blog/2014/02/04/obshestvennaya_karta_problem_obnovlenia.html</id>
+    <published>2014-02-04T10:38:50+04:00</published>
+    <updated>2021-05-21T13:08:02+03:00</updated>
+    <author>
+      <name>constXife</name>
+    </author>
+    <content type="html">&lt;hr /&gt;
+
+&lt;p&gt;Описание обновлений за неделю.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Были проведены оптимизационные работы, в следствие чего, скорость работы сайта ощутимо увеличилась.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Исправлен баг с подписками для зарегистрированных пользователей&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Добавлен один уровень уровень уменьшения масштаба.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Добавлена ссылка на редактирование карт (через редактор OSM, изменения с этого сайта будут скачиваться примерно раз в месяц)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Добавлена информация для поисковиков (но пока индексируется лишь гуглом, с яндексом видимо надо дополнительно разбираться)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;И теперь подробнее о некоторых моментах.&lt;/p&gt;
+
+&lt;p&gt;Оптимизация&lt;/p&gt;
+
+&lt;p&gt;Как некоторые могли заметить, в последнее время мой сайт загружался довольно долго. Это объясняется тем, что я сосредоточился на скорости выпуска новых возможностей и не долго не ломал голову над оптимизацией, а шёл напролом, размахивая костылями в коде, заклеивая дыры обычной пластиковой бутылкой и скотчем. Но прежде чем начать работать над поддержкой дополнительных городов мне пришлось всё же заняться оптимизацией внутренностей сайта.&lt;/p&gt;
+
+&lt;p&gt;В общем-то, на моём текущем уровне оптимизация — дело не очень хитрое. Всё свелось к тому, что я постарался минимизировать запросы к другим таблицам. И поэтому для счётчиков фотографий, подписчиков и комментариев были заведены соответственные поля в таблицах. Следующим шагом было подключение в запросах используемых таблиц джойнами (чтобы ORM-ка не лезла в каждой итерации в другие таблицы) и использование частичных полей в API запросе, чтобы при получении списка сообщений о проблемах выдавалась только необходимая информация, а при заходе в неё — вся оставшаяся. Идея была хорошая, но, к сожалению, я не смог завести Ember с частичными полями API — он упорно всё кешировал и не хотел отправлять новый запрос. Это наверняка решается как-то просто, но на тот момент мне хотелось поскорее уже выпустить хоть что-то, поэтому я решил частичные поля API оставить на потом. Ну и напоследник я врубил артиллерию — redis-кеширование API ответов. Но я не сильно опытен в использовании кеширования, поэтому я список проблем не решился кешировать, пока не поиграюсь и не разберусь получше в её внутренностях.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          # index.json.builder
+          json.meta do
+            json.total_pages @reports.total_pages
+          end
+          json.reports @reports, partial: 'api/reports/report', as: :report
+          json.users @users, partial: 'api/users/user', as: :user
+          json.photos @photos, partial: 'api/photos/photo', as: :photo
+          json.cache! @statuses, expires_in: 3.day do
+            json.statuses @statuses, partial: 'api/statuses/status', as: :status
+          end
+          json.cache! @categories, expires_in: 1.day do
+            json.categories @categories, partial: 'api/categories/category', as: :category
+          end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;С API-сервером пока было закончено и я перешёл к интерфейсу. Самой главной задачей стало ускорить появление карты. Поэтому на карте сначала появляются первые 10 проблем, а потом асинхронно подгружаются остальные проблемы. Всё довольно просто, да.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          # index_route.js.coffee
+          afterModel: (reports) -&amp;gt;
+              totalPages = reports.store.typeMapFor(reports.type).metadata.total_pages
+              page = 2
+              Ember.run.scheduleOnce 'afterRender', @, =&amp;gt;
+                while page &amp;lt; totalPages
+                  @store.find('report', { map_scope: true, page: page }).then (records) -&amp;gt;
+                    records.forEach (record) -&amp;gt;
+                      reports.pushObject(record)
+                  page++
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ну и потом устроил зачистку в коде, чтобы выпилить ненужные запросы к серверу, а в ответах API сервера возвращается не только список проблем, к примеру, но и сразу релевантный список сопутствующих сущностей, таких как список используемых пользователей или фотографий. В итоге получается как-то так.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          # API, возвращение списка проблем.
+          INFO -- : Completed 200 OK in 236ms (Views: 199.5ms | ActiveRecord: 21.0ms)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;А дальше дело за браузером.&lt;/p&gt;
+
+&lt;p&gt;Поисковые системы&lt;/p&gt;
+
+&lt;p&gt;Чтобы поисковые системы имели возможность индексировать содержимое моего AJAX-сайта я создал для себя отдельный мини-сервис, который заходит своим headless-браузером на определённый URL и тащит оттуда сгенерированный html-код, который потом скармливает поисковому роботу (YARRR!).&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ставим phantomjs&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Колбасим скрипт для парсинга.&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;       # html.js
+       var page = require('webpage').create(), system = require('system'), output, address;
+       if (system.args.length === 1) {
+           console.log('Usage: html.js &amp;lt;URL&amp;gt;');
+           phantom.exit();
+       }
+       address = system.args[1];
+       page.onResourceRequested = function(requestData, request) {
+         if ((/http:\/\/.+?\.(css|png|jpg|jpeg)$/gi).test(requestData['url'])) {
+           request.abort();
+         }
+       };
+       page.open(address, function(status) {
+         if (status !== 'success') {
+           console.log('FAIL to load the address: ' + address);
+           phantom.exit();
+         } else {
+           window.setTimeout(function() {
+             console.log(page.content);
+             phantom.exit();
+           }, 100);
+         }
+       });
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Колбасим приёмочный веб-скрипт (внимание, говнокод)&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;       # phantom.rb
+       class PhantomApp  
+         def call(env)
+           request = Rack::Request.new(env)
+           headers = {'Content-Type' =&amp;gt; 'text/html'}    
+           path = request.path.split('/')[1]
+           case path
+             when 'html'
+               url = request.fullpath[6..-1]
+               if url         
+                 parsed_url = URI.parse(url)          
+                 result_url = url
+                 parameters = []
+                 if parsed_url &amp;amp;&amp;amp; parsed_url.query
+                   parameters = CGI.parse(parsed_url.query)
+                   unless parameters.empty?              
+                     if parameters.has_key?('_escaped_fragment_')
+                       parameters.delete('_escaped_fragment_')              
+                       unless parameters.has_key?('crawler')
+                         parameters.merge!({'crawler' =&amp;gt; 'true'})
+                       end
+                     end
+                     calculated_params = (parameters.empty?)? '' : "?#{URI.encode_www_form(parameters)}"
+                     result_url = "#{parsed_url.scheme}://#{parsed_url.host}:#{parsed_url.port}#{parsed_url.path}#{calculated_params}"
+                   end                                
+                 end
+                 output = `phantomjs /var/www/lunkserv/phantom/html.js #{result_url}`
+                 [200, headers, [output]]           
+               else
+                 [401, headers, ['html is empty']]   
+               end
+           else
+             [404, headers, ['404: ' + path]]
+           end
+         end
+       end
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;И теперь мы можем получать html-код по такому адресу: http://phantom.lunkserv.ru/html/http://report.obla…&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Настраиваем httpd-сервер.&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;       server {
+           ...
+           if ( $args ~ _escaped_fragment_ ) {
+               rewrite ^(.*)$ /phantom-proxy$scheme://$host:$server_port$uri last;
+           }
+           location ^~ /phantom-proxy {
+               proxy_pass &amp;lt;a href="http://phantom.lunkserv.ru/html/;"&amp;gt; &amp;lt;a href="http://phantom.lunkserv.ru/html/;"&amp;gt; http://phantom.lunkserv.ru/html/;
+           }
+           ...
+       }
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ну и нужно немного посыпать свои странички мета-тегом (https://developers.google.com/webmasters/ajax-craw…)&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;       &amp;lt;meta name="fragment" content="!"&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Теперь должно работать.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Общественная карта проблем. Отрисовка карты</title>
+    <link rel="alternate" href="http://constxife.ru/blog/2014/01/25/obshestvennaya_karta_problem_otrisovka.html"/>
+    <id>http://constxife.ru/blog/2014/01/25/obshestvennaya_karta_problem_otrisovka.html</id>
+    <published>2014-01-25T10:38:50+04:00</published>
+    <updated>2021-05-21T13:08:02+03:00</updated>
+    <author>
+      <name>constXife</name>
+    </author>
+    <content type="html">&lt;hr /&gt;
+
+&lt;p&gt;Я собираюсь рассказать как сделать такую же карту, которая используется у меня в проекте. Как некоторые люди, знакомые с openstreetmap.org, могли заметить — у меня используется "своя" тема. И сходу же закину спойлеры одной строкой: прекрасный софт tilemill от mapbox.com для редактирования стилей, тема OSM Bright от mapbox.com, osm2pgsql для закидывания ГИС информации в PostgreSQL, postgis расширение для работы с ГИС информацией, PostgreSQL, базы OSM, Mbutil для распаковки экспортированного из Tilemill файла .mbtiles.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="../../../../images/system/redactor_assets/pictures/12/content_______________2014-01-26___0.10.01.png" alt="Общественная карта проблем" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Первым шагом мы устанавливаем PostgreSQL (у меня была версия 9.3) и ГИС-расширение к нему — PostGIS (2.93). Приготавливаем базу:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          postgres createuser gisuser
+          postgres createdb --encoding=UTF8 gis
+          psql -d gis -f /usr/pgsql-9.3/share/contrib/postgis-2.1/postgis.sql
+          psql -d gis -f /usr/pgsql-9.3/share/contrib/postgis-2.1/spatial_ref_sys.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Клоним osm2pgsql c его репозитория, выкачиваем нужные OSM-ки с ГИС информацией. В моём случае это были RU-KK (республика Хакасия) и RU-KYA (Красноярский Край). И запихиваем их в базу:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          ./osm2pgsql /root/shared/osm/RU-KK-140125.osm
+          ./osm2pgsql /root/shared/osm/RU-KYA-140125.osm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;База с ГИС информацией должна быть готова. Следующим шагом мы будем напяливать на обнажённые кости ГИС информации шкуру от OSM Bright. Качаем Tilemill, клоним тему OSM Bright с репозитория, настраиваем configure.py, запускаем make.py и эта тема должна установиться в Tilemill таким образом, что при запуске программы вы её увидите в проектах.&lt;/p&gt;
+
+&lt;p&gt;Если вы сделали все предыдущие шаги правильно, а я не ошибся в своей инструкции, то вы должны увидеть нормальную карту (возможно вам придётся слегка подождать, пока всё прогрузится и, к тому же, если вы загружали только некоторые области, то вам необходимо будет вручную к ним перейти).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="../../../../images/system/redactor_assets/pictures/11/content_______________2014-01-25___23.37.28.png" alt="Tilemill" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Так как MapBox не любят номера домов, то вам придётся немного поработать, чтобы добавить их самостоятельно. Для этого мы создадим отдельный слой с номерами домов.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          ( SELECT way, "addr:housenumber" 
+            FROM planet_osm_polygon
+            WHERE  "addr:housenumber"  IS NOT NULL
+          ) AS data
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Затем настроим стиль в labels.mss, после чего сохраняем проект и видим, что при увеличении 17 уровня и более, появившиеся номера домов.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          /* ---- House labels ------------------------------------------ */
+          #housenumbers_label[zoom &amp;gt;= 17] {
+            ::label {
+              text-name: '[addr:housenumber]';
+              text-face-name:@sans;
+              text-size: 9;   
+              text-placement:interior;
+              text-min-distance: 1;
+              text-wrap-width: 0;
+              text-fill: #444;
+            }    
+          }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src="../../../../images/system/redactor_assets/pictures/13/content_______________2014-01-26___12.33.52.png" alt="Слои номера домов" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="../../../../images/system/redactor_assets/pictures/14/content_______________2014-01-26___12.30.27.png" alt="Стили слоя с номерами домов" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Как только вы наиграетесь и захотите наконец-то закинуть карту к себе на любимый сервачок, то вам надо будет озаботиться экспортом вашего картографического творчества. Для этого вам нужно выбрать в меню "экспорт" тип MBTiles, выбрать необходимый регион для экспорта, нужный диапазон зума (у меня это было 13-17) и нажать на кнопку экспорта. Вуаля. У нас будет готов (рано или поздно) файл mbtiles, который вы можете распаковать при помощи утилиты Mbutil в виде графических тайлов. А потом вы можете смело прописывать на своём leaflet-скрипте путь к вашим тайлам.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;          L.tileLayer("http://maps.oblakan.ru/tiles/{z}/{x}/{y}.png", {
+              attribution: '&amp;amp;copy; &amp;lt;a rel="nofollow" href="http://osm.org/copyright"&amp;gt;OpenStreetMap&amp;lt;/a&amp;gt; contributors'
+          })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Заключение&lt;/p&gt;
+
+&lt;p&gt;Этот способ хорош, если у вас нет денег на хостинг карт от тех же mapbox.com, а нужная вам карта охватывает небольшую область. Рендеринг карты очень требовательная операция. Например, небольшой участок, включающий Абакан, Черногорск и Саяногорск (около 100 км в длину и, допустим, 50 км в ширину), у меня на моём ноутбуке (двухядерный intel Core i5 2,4 ГГц) отрисовывалось 3 часа. А когда в первый раз я попытался отрисовать весь сибирский округ, то число было около 280 дней и с каждой минутой число становилось всё больше. Так, что, если вам нужно покрыть большой участок карты и у вас нет под рукой мощного компьютера, то вам лучше воспользоваться специализированными сервисами.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="../../../../images/system/redactor_assets/pictures/10/content_______________2014-01-25___18.33.17.png" alt="Экспорт карты в mbtiles" /&gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Релиз OblakanRM</title>
+    <link rel="alternate" href="http://constxife.ru/blog/2014/01/19/reliz_oblakanrm.html"/>
+    <id>http://constxife.ru/blog/2014/01/19/reliz_oblakanrm.html</id>
+    <published>2014-01-19T10:38:50+04:00</published>
+    <updated>2021-05-21T13:08:02+03:00</updated>
+    <author>
+      <name>constXife</name>
+    </author>
+    <content type="html">&lt;hr /&gt;
+
+&lt;p&gt;26 декабря, 2013 года я выпустил общественную карту проблем в плавание и сделал объявление на двух местных сайтах — форум.абакан.рф и nakaba.ru. В первые два дня было по 60 посетителей в день и было создано 4 сообщения о проблеме. И на текущий день количество сообщений остаётся на том же уровне. А посещаемость упала до 1-4 человек в день.&lt;/p&gt;
+
+&lt;p&gt;После моего релиза появились отзывы от посетителей, эмоциональная шкала которых разнилась от нейтрального до позитивного, а в качестве критики, чаще всего, упоминалось отсутствие понятного введения в сайт, тематических проблем и средств для распространения информации через социальные сети (шаринг). Большинство замечаний было принято к сведению и реализовано. А пару дней назад мне наш замечательный абаканский интернет-провайдер "Сеть", чьими услугами я пользуюсь с 2008 года, предоставил VDS для проекта, благодаря чему, у меня хотя бы теперь расходы ограничиваются лишь временем. Так что теперь, если ваш провайдер находится в пиринге с Сетью (Интертелеком, Телецентр, Скат+ и Техносеть), вы заметите, что отклик от сайта станет существеннее короче.&lt;/p&gt;
+
+&lt;p&gt;Касательно будущих планов.. Сейчас я планирую сделать тематические метки (уже в процессе) и, что главное, поддержку других городов! Правда проблема с ними такова, что кроме Абакана в Хакасии нет достаточно подробно отрисованных городов (напомню, что в качестве карты у меня используется OpenStreetMap, где карты наполняются любыми добровольными участниками). Надо попробовать собрать добровольцев, чтобы на выходных отрисовать города (Абакан).&lt;/p&gt;
+
+&lt;p&gt;Также, у меня изменилось мнение по поводу монетации. Раньше я планировал предлагать городам добавить поддержку за 500 рублей в месяц, но решил, что у них интереса и так вряд ли особо много будет, а цена будет дополнительным барьером. Поэтому решил, что на общественную карту проблем города будут добавляться бесплатно. А первыми дополнительными городами на карте, я надеюсь, будет Красноярск, потом Черногорск с Саяногорском (если отрисуем их карты) и какой-нибудь город из Канады, чтобы развивать многоязычность своего проекта (которую он в принципе уже изначально поддерживает). Как же я собираюсь получать доход от проекта? Я хочу предлагать специализированные сборки для коммерческих предприятий, которым нужна карта с привязкой к некоторым данным, но, если честно, я пока плохо представляю где конкретно это может пригодиться.&lt;/p&gt;
+
+&lt;p&gt;Абакан, результат онлайновой картовстречи (http://forum.openstreetmap.org/viewtopic.php?pid=214598#p214598).&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Тестовый релиз</title>
+    <link rel="alternate" href="http://constxife.ru/blog/2013/11/01/testoviy_reliz.html"/>
+    <id>http://constxife.ru/blog/2013/11/01/testoviy_reliz.html</id>
+    <published>2013-11-01T10:38:50+04:00</published>
+    <updated>2021-05-21T13:08:02+03:00</updated>
+    <author>
+      <name>constXife</name>
+    </author>
+    <content type="html">&lt;hr /&gt;
+
+&lt;p&gt;Выпустил тестовый релиз общественной карты.&lt;/p&gt;
+
+&lt;p&gt;В этой тестовой версии имеется возможность подписки на события (правда письма временно не отсылаются, пока я не реализую систему автоматизированной отписки), создание, редактирование, удаление сообщений о проблемах и комментирование, есть карта проблем.&lt;/p&gt;
+
+&lt;p&gt;Тестовый режим продлится до 11 ноября, а до этого момента я буду раз в 2 дня делать изменения и вести историю разработки здесь до окончательного релиза.&lt;/p&gt;
+
+&lt;p&gt;UPDATE (11.11.13): Прошу прощения за перерыв и молчание в эфире — я болел и к тому же клавиатура на моём ноутбуке теперь в Вальгалле для компьютерной периферии. Я вынужден продлить тестовый режим на 3 дня до четверга. И сегодня вечером будет новое обновление.&lt;/p&gt;
+
+&lt;p&gt;UPDATE (12.11.13): Опоздал на день из-за того, что некоторые задачи заняли больше времени, чем предполагалось. Но лучше поздно чем никогда.&lt;/p&gt;
+
+&lt;p&gt;Версия 0.2&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;изображения-заглушки перенесены с placehold.it на сервер&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;исправлен показ подсказок над кнопками подписки и удалить&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;теперь с сервера отправляются письма, и можно от них отписаться (уведомления присылаются при смене статуса проблемы, при создании подписки и при удалении подписки)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;реализованы частичные тесты для моделей и API&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;отключено масштабирование карт по колёсику мышки (на ноутбуке становится неудобно скроллить)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;поправлены титульники страниц&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;теперь пустые комментарии не отправляются, а сами комментарии можно отправлять по сочетанию клавиш ctrl+enter или cmd+enter&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;убрали слово "Описание" с описаний проблем&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;подключили агент new relic&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Спасибо за замечания Inknofs'у.&lt;/p&gt;
+
+&lt;p&gt;Про письма можно отдельно упомянуть, что используется очередь сообщений через гем Sidekiq, который работает с key-value store Redis.&lt;/p&gt;
+
+&lt;p&gt;UPDATE 19.11.13: Извиняюсь за задержку обновлений, но пока нет времени выкатить новое.&lt;/p&gt;
+
+&lt;p&gt;UPDATE 27.11.13:&lt;/p&gt;
+
+&lt;p&gt;Версия 0.2 (всё та же версия, да-да)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;добавлена поддержка трекера ошибок errbit&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;подключена метрика от Yandex&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;добавлена миникарта в списке проблем&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;изменено всплывающее окно на большой карте при клике на проблему&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+</feed>

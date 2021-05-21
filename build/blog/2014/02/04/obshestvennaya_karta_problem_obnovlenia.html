@@ -1,0 +1,120 @@
+<!doctype html> <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""><![endif]--> <!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang=""><![endif]--> <!--[if IE 8]><html class="no-js lt-ie9" lang=""><![endif]--> <!--[if gt IE 8]><!--> <html class=no-js lang=""> <!--<![endif]--> <head> <meta charset=utf-8> <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"> <title>Блог Тыща constXife Кьятлоттьяви - Общественная карта проблем. Обновления от 4 февраля.</title> <meta name=description content=""> <meta name=viewport content="width=device-width, initial-scale=1"> <link rel=stylesheet href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin=anonymous> <link rel=stylesheet href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> <link href="../../../../stylesheets/layout.css" rel=stylesheet /> <!--[if lt IE 9]><script src="js/vendor/html5-3.6-respond-1.4.2.min.js"></script><![endif]--> <link rel=alternate type="application/atom+xml" title="Atom Feed" href="/blog/feed.xml"/> </head> <body> <!--[if lt IE 8]><p class=browserupgrade>You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]--> <header class=container-fluid> <div id=scene_text class=flex-items-xs-middle> <div class=lead> <a href="/">constXife</a> <p>Обжигающе-холодные, мерцающие угольки</p> </div> <div class=contacts> <div class="ul list-inline"> <li class=list-inline-item> <a href="mailto:constxife@yandex.ru" title="Связаться через e-mail"> <i class="fa fa-envelope"></i> </a> </li> <li class=list-inline-item> <a href="https://github.com/constXife" title=GitHub> <i class="fa fa-github"></i> </a> </li> </div> </div> </div> </header> <div class="main wrapper clearfix"> <div class="col-md-1 col-lg-1"></div> <div id=main role=main class="col-xs-12 col-sm-12 col-md-10 col-lg-10"> <article> <div class=head> <h2>Общественная карта проблем. Обновления от 4 февраля.</h2> <hr> <div class=meta>Опубликовано 4 февраля, 2014</div> </div> <div class=body> <hr/> <p>Описание обновлений за неделю.</p> <ul> <li> <p>Были проведены оптимизационные работы, в следствие чего, скорость работы сайта ощутимо увеличилась.</p> </li> <li> <p>Исправлен баг с подписками для зарегистрированных пользователей</p> </li> <li> <p>Добавлен один уровень уровень уменьшения масштаба.</p> </li> <li> <p>Добавлена ссылка на редактирование карт (через редактор OSM, изменения с этого сайта будут скачиваться примерно раз в месяц)</p> </li> <li> <p>Добавлена информация для поисковиков (но пока индексируется лишь гуглом, с яндексом видимо надо дополнительно разбираться)</p> </li> </ul> <p>И теперь подробнее о некоторых моментах.</p> <p>Оптимизация</p> <p>Как некоторые могли заметить, в последнее время мой сайт загружался довольно долго. Это объясняется тем, что я сосредоточился на скорости выпуска новых возможностей и не долго не ломал голову над оптимизацией, а шёл напролом, размахивая костылями в коде, заклеивая дыры обычной пластиковой бутылкой и скотчем. Но прежде чем начать работать над поддержкой дополнительных городов мне пришлось всё же заняться оптимизацией внутренностей сайта.</p> <p>В общем-то, на моём текущем уровне оптимизация — дело не очень хитрое. Всё свелось к тому, что я постарался минимизировать запросы к другим таблицам. И поэтому для счётчиков фотографий, подписчиков и комментариев были заведены соответственные поля в таблицах. Следующим шагом было подключение в запросах используемых таблиц джойнами (чтобы ORM-ка не лезла в каждой итерации в другие таблицы) и использование частичных полей в API запросе, чтобы при получении списка сообщений о проблемах выдавалась только необходимая информация, а при заходе в неё — вся оставшаяся. Идея была хорошая, но, к сожалению, я не смог завести Ember с частичными полями API — он упорно всё кешировал и не хотел отправлять новый запрос. Это наверняка решается как-то просто, но на тот момент мне хотелось поскорее уже выпустить хоть что-то, поэтому я решил частичные поля API оставить на потом. Ну и напоследник я врубил артиллерию — redis-кеширование API ответов. Но я не сильно опытен в использовании кеширования, поэтому я список проблем не решился кешировать, пока не поиграюсь и не разберусь получше в её внутренностях.</p> <pre><code>          # index.json.builder
+          json.meta do
+            json.total_pages @reports.total_pages
+          end
+          json.reports @reports, partial: 'api/reports/report', as: :report
+          json.users @users, partial: 'api/users/user', as: :user
+          json.photos @photos, partial: 'api/photos/photo', as: :photo
+          json.cache! @statuses, expires_in: 3.day do
+            json.statuses @statuses, partial: 'api/statuses/status', as: :status
+          end
+          json.cache! @categories, expires_in: 1.day do
+            json.categories @categories, partial: 'api/categories/category', as: :category
+          end
+</code></pre> <p>С API-сервером пока было закончено и я перешёл к интерфейсу. Самой главной задачей стало ускорить появление карты. Поэтому на карте сначала появляются первые 10 проблем, а потом асинхронно подгружаются остальные проблемы. Всё довольно просто, да.</p> <pre><code>          # index_route.js.coffee
+          afterModel: (reports) -&gt;
+              totalPages = reports.store.typeMapFor(reports.type).metadata.total_pages
+              page = 2
+              Ember.run.scheduleOnce 'afterRender', @, =&gt;
+                while page &lt; totalPages
+                  @store.find('report', { map_scope: true, page: page }).then (records) -&gt;
+                    records.forEach (record) -&gt;
+                      reports.pushObject(record)
+                  page++
+</code></pre> <p>Ну и потом устроил зачистку в коде, чтобы выпилить ненужные запросы к серверу, а в ответах API сервера возвращается не только список проблем, к примеру, но и сразу релевантный список сопутствующих сущностей, таких как список используемых пользователей или фотографий. В итоге получается как-то так.</p> <pre><code>          # API, возвращение списка проблем.
+          INFO -- : Completed 200 OK in 236ms (Views: 199.5ms | ActiveRecord: 21.0ms)
+</code></pre> <p>А дальше дело за браузером.</p> <p>Поисковые системы</p> <p>Чтобы поисковые системы имели возможность индексировать содержимое моего AJAX-сайта я создал для себя отдельный мини-сервис, который заходит своим headless-браузером на определённый URL и тащит оттуда сгенерированный html-код, который потом скармливает поисковому роботу (YARRR!).</p> <ol> <li> <p>Ставим phantomjs</p> </li> <li> <p>Колбасим скрипт для парсинга.</p> <pre><code>       # html.js
+       var page = require('webpage').create(), system = require('system'), output, address;
+       if (system.args.length === 1) {
+           console.log('Usage: html.js &lt;URL&gt;');
+           phantom.exit();
+       }
+       address = system.args[1];
+       page.onResourceRequested = function(requestData, request) {
+         if ((/http:\/\/.+?\.(css|png|jpg|jpeg)$/gi).test(requestData['url'])) {
+           request.abort();
+         }
+       };
+       page.open(address, function(status) {
+         if (status !== 'success') {
+           console.log('FAIL to load the address: ' + address);
+           phantom.exit();
+         } else {
+           window.setTimeout(function() {
+             console.log(page.content);
+             phantom.exit();
+           }, 100);
+         }
+       });
+</code></pre> </li> <li> <p>Колбасим приёмочный веб-скрипт (внимание, говнокод)</p> <pre><code>       # phantom.rb
+       class PhantomApp  
+         def call(env)
+           request = Rack::Request.new(env)
+           headers = {'Content-Type' =&gt; 'text/html'}    
+           path = request.path.split('/')[1]
+           case path
+             when 'html'
+               url = request.fullpath[6..-1]
+               if url         
+                 parsed_url = URI.parse(url)          
+                 result_url = url
+                 parameters = []
+                 if parsed_url &amp;&amp; parsed_url.query
+                   parameters = CGI.parse(parsed_url.query)
+                   unless parameters.empty?              
+                     if parameters.has_key?('_escaped_fragment_')
+                       parameters.delete('_escaped_fragment_')              
+                       unless parameters.has_key?('crawler')
+                         parameters.merge!({'crawler' =&gt; 'true'})
+                       end
+                     end
+                     calculated_params = (parameters.empty?)? '' : "?#{URI.encode_www_form(parameters)}"
+                     result_url = "#{parsed_url.scheme}://#{parsed_url.host}:#{parsed_url.port}#{parsed_url.path}#{calculated_params}"
+                   end                                
+                 end
+                 output = `phantomjs /var/www/lunkserv/phantom/html.js #{result_url}`
+                 [200, headers, [output]]           
+               else
+                 [401, headers, ['html is empty']]   
+               end
+           else
+             [404, headers, ['404: ' + path]]
+           end
+         end
+       end
+</code></pre> </li> <li> <p>И теперь мы можем получать html-код по такому адресу: http://phantom.lunkserv.ru/html/http://report.obla…</p> </li> <li> <p>Настраиваем httpd-сервер.</p> <pre><code>       server {
+           ...
+           if ( $args ~ _escaped_fragment_ ) {
+               rewrite ^(.*)$ /phantom-proxy$scheme://$host:$server_port$uri last;
+           }
+           location ^~ /phantom-proxy {
+               proxy_pass &lt;a href="http://phantom.lunkserv.ru/html/;"&gt; &lt;a href="http://phantom.lunkserv.ru/html/;"&gt; http://phantom.lunkserv.ru/html/;
+           }
+           ...
+       }
+</code></pre> </li> <li> <p>Ну и нужно немного посыпать свои странички мета-тегом (https://developers.google.com/webmasters/ajax-craw…)</p> <pre><code>       &lt;meta name="fragment" content="!"&gt;
+</code></pre> </li> </ol> <p>Теперь должно работать.</p> </div> </article> </div> <div class="col-md-1 col-lg-1"></div> </div> <div id=footer class=container-fluid> <footer class=wrapper> &copy; 2013 </footer> </div> <script src="../../../../javascripts/site.js"></script> <script>
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter21799057 = new Ya.Metrika({
+                    id:21799057,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script> <noscript><div><img src="https://mc.yandex.ru/watch/21799057" style="position:absolute; left:-9999px;" alt=""/></div></noscript> </body> </html>

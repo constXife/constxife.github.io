@@ -1,0 +1,52 @@
+<!doctype html> <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""><![endif]--> <!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang=""><![endif]--> <!--[if IE 8]><html class="no-js lt-ie9" lang=""><![endif]--> <!--[if gt IE 8]><!--> <html class=no-js lang=""> <!--<![endif]--> <head> <meta charset=utf-8> <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"> <title>Блог Тыща constXife Кьятлоттьяви - Разработка OblakanRM</title> <meta name=description content=""> <meta name=viewport content="width=device-width, initial-scale=1"> <link rel=stylesheet href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin=anonymous> <link rel=stylesheet href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> <link href="../../../../stylesheets/layout.css" rel=stylesheet /> <!--[if lt IE 9]><script src="js/vendor/html5-3.6-respond-1.4.2.min.js"></script><![endif]--> <link rel=alternate type="application/atom+xml" title="Atom Feed" href="/blog/feed.xml"/> </head> <body> <!--[if lt IE 8]><p class=browserupgrade>You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]--> <header class=container-fluid> <div id=scene_text class=flex-items-xs-middle> <div class=lead> <a href="/">constXife</a> <p>Обжигающе-холодные, мерцающие угольки</p> </div> <div class=contacts> <div class="ul list-inline"> <li class=list-inline-item> <a href="mailto:constxife@yandex.ru" title="Связаться через e-mail"> <i class="fa fa-envelope"></i> </a> </li> <li class=list-inline-item> <a href="https://github.com/constXife" title=GitHub> <i class="fa fa-github"></i> </a> </li> </div> </div> </div> </header> <div class="main wrapper clearfix"> <div class="col-md-1 col-lg-1"></div> <div id=main role=main class="col-xs-12 col-sm-12 col-md-10 col-lg-10"> <article> <div class=head> <h2>Разработка OblakanRM</h2> <hr> <div class=meta>Опубликовано 16 октября, 2013</div> </div> <div class=body> <hr/> <p>Итак, напишу сумбурную заметку. Я занимаюсь разработкой общественной карты проблем для своего города. И 1 ноября будет первый публичный, тестовый релиз, который можно будет потыркать.</p> <p>К сожалению, разработка слегка затянулась из-за применения новых технологий, с которыми мне хотелось поиграться. Но оно того стоит! Вообще, я планирую выступить с докладом на предстоящей местной IT-конференции в котором опишу как и на чём работает мой проект. Но некоторые вещи можно рассказать и сейчас.</p> <p>Мой проект работает на Ruby on Rails 4 и Ember. На последней технологии я и заострю ваше внимание, так как именно с ней я в последние недели занимаюсь горячим, буйным.. исследованием.</p> <p>Ember — это js-фреймворк для разработки веб-приложений. По сути, это означает, что весь клиентский интерфейс строится на js, а общение с сервером ограничивается передачей данных моделей, например, в формате json через API. А это значит, что можно таким же образом добавить мобильные клиенты, не делая дополнительных усилий для организации коммуникации с сервером.</p> <pre><code>          # GET /api/reports
+          {"reports": [    
+              {
+                  "id": 4,
+                  "title": "1",
+                  "description": "1",
+                  "address": null,
+                  "longitude": 91.43,
+                  "latitude": 53.717,
+                  "user_id": null,
+                  "created_at": "2013-10-15T00:51:24.226+08:00",
+                  "updated_at": "2013-10-15T00:51:25.446+08:00",
+                  "url": "http://localhost:3000/api/reports/4"
+              }
+          ]}
+</code></pre> <p>Этот фреймворк позволяет добиться плавного, отзывчивого, динамичного интерфейса, минимизируя усилия по поддержанию кода. К примеру, этот код добавляет комментарий:</p> <pre><code>          # controllers/comments_controller.js.coffee
+          OblakanRM.CommentsController = Ember.ArrayController.extend
+            actions:
+              comment_submit: -&gt;
+                comment_hash = {
+          	...
+                }
+                comment = @get('store').createRecord('comment', comment_hash)
+                comment.save().then =&gt;        
+                  @pushObject(comment)
+                , (reason) -&gt;
+                  toastr.error(reason, 'Возникла ошибка при добавлении комментария')
+</code></pre> <p>Одной командой @pushObject(comment), комментарий автоматически добавляется в список и обновляются все счётчики, связанные с комментариями.</p> <p>Мне очень нравится концепция Ember, хотя им предстоит ещё много работы. Фреймворк активно развивается и порой очень радикально. Многие примеры кода на stackoverflow тупо устарели, хотя они могут быть датированы парой месяцев назад. А документации фреймворку явно не хватает для работы.</p> </div> </article> </div> <div class="col-md-1 col-lg-1"></div> </div> <div id=footer class=container-fluid> <footer class=wrapper> &copy; 2013 </footer> </div> <script src="../../../../javascripts/site.js"></script> <script>
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter21799057 = new Ya.Metrika({
+                    id:21799057,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script> <noscript><div><img src="https://mc.yandex.ru/watch/21799057" style="position:absolute; left:-9999px;" alt=""/></div></noscript> </body> </html>
