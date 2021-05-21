@@ -15,7 +15,7 @@ gem 'middleman-livereload', '~> 3.4.3'
 gem 'middleman-minify-html'
 gem 'webrick', '~> 1.7'
 
-gem 'redcarpet', '~> 3.3', '>= 3.3.3'
+gem 'redcarpet', '~> 3.5'
 
 # For feed.xml.builder
 gem 'builder', '~> 3.0'
