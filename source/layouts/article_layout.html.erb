@@ -17,16 +17,5 @@
     <div class="body">
       <%= yield %>
     </div>
-    <div class="footer">
-      <div class="tags">
-        <ul>
-          <% current_article.tags.each do |tag| %>
-            <li>
-              <a class="tag tag-default" href="<%= tag_path(tag) %>"><%= tag %></a>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
   </article>
 <% end %>

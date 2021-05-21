@@ -13,7 +13,7 @@ gem 'middleman', '~> 4.0'
 gem 'middleman-blog'
 gem 'middleman-livereload', '~> 3.4.3'
 gem 'middleman-minify-html'
-gem 'middleman-deploy', github: 'middleman-contrib/middleman-deploy', branch: 'master'
+gem 'webrick', '~> 1.7'
 
 gem 'redcarpet', '~> 3.3', '>= 3.3.3'
 
